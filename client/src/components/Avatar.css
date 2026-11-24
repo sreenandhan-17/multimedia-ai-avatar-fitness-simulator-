@@ -1,0 +1,182 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-small {
+  width: 90px;
+}
+
+.avatar-medium {
+  width: 240px;
+}
+
+.avatar-large {
+  width: 380px;
+}
+
+.avatar-figure {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.avatar-limb {
+  stroke: var(--color-accent);
+  stroke-width: 9;
+  stroke-linecap: round;
+  fill: none;
+  transition: stroke 0.2s ease;
+}
+
+.avatar-head {
+  fill: var(--color-accent);
+}
+
+.avatar-hair-bun {
+  fill: var(--color-accent);
+}
+
+.avatar-hair-male {
+  stroke: var(--color-accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.avatar-floor-line {
+  stroke: var(--color-border);
+  stroke-width: 3;
+  stroke-dasharray: 6 6;
+}
+
+.avatar-hand-palm {
+  stroke: var(--color-accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+/* Subtle styling differences between genders */
+.avatar-male .avatar-limb {
+  stroke-width: 11;
+}
+
+.avatar-female .avatar-limb {
+  stroke-width: 8;
+}
+
+/* Push-Up Animation: Body rotates and lowers toward floor around the pivot of the feet/toes (52px 180px) */
+.avatar-push-up .avatar-pushup-body {
+  transform-origin: 52px 180px;
+  animation: pushup-cycle var(--avatar-duration, 2.8s) ease-in-out infinite;
+  animation-play-state: var(--avatar-play-state, running);
+}
+
+.avatar-push-up .avatar-pushup-upperarm {
+  transform-origin: 218px 96px;
+  animation: pushup-elbow-bend var(--avatar-duration, 2.8s) ease-in-out infinite;
+  animation-play-state: var(--avatar-play-state, running);
+}
+
+.avatar-push-up .avatar-pushup-forearm {
+  transform-origin: 218px 180px;
+  animation: pushup-forearm-hinge var(--avatar-duration, 2.8s) ease-in-out infinite;
+  animation-play-state: var(--avatar-play-state, running);
+}
+
+@keyframes pushup-cycle {
+  0%,
+  100% {
+    /* High plank position */
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    /* Lowered push-up: chest approaches the floor, body tilts down */
+    transform: rotate(11deg) translateY(18px);
+  }
+}
+
+@keyframes pushup-elbow-bend {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    /* Elbow flares back ~45 to 60 deg */
+    transform: rotate(-50deg);
+  }
+}
+
+@keyframes pushup-forearm-hinge {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    /* Forearm supports 90 deg bend */
+    transform: rotate(35deg);
+  }
+}
+
+/* Squat loop */
+.avatar-squat .avatar-body {
+  animation: squat-bob var(--avatar-duration, 3s) ease-in-out infinite;
+  animation-play-state: var(--avatar-play-state, running);
+}
+
+.avatar-squat .avatar-thigh-left,
+.avatar-squat .avatar-thigh-right {
+  animation: squat-thigh var(--avatar-duration, 3s) ease-in-out infinite;
+  animation-play-state: var(--avatar-play-state, running);
+}
+
+.avatar-squat .avatar-shin-left,
+.avatar-squat .avatar-shin-right {
+  animation: squat-shin var(--avatar-duration, 3s) ease-in-out infinite;
+  animation-play-state: var(--avatar-play-state, running);
+}
+
+@keyframes squat-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(28px);
+  }
+}
+
+@keyframes squat-thigh {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-25deg);
+  }
+}
+
+@keyframes squat-shin {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(40deg);
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-push-up .avatar-pushup-body,
+  .avatar-push-up .avatar-pushup-upperarm,
+  .avatar-push-up .avatar-pushup-forearm,
+  .avatar-squat .avatar-body,
+  .avatar-squat .avatar-thigh-left,
+  .avatar-squat .avatar-thigh-right,
+  .avatar-squat .avatar-shin-left,
+  .avatar-squat .avatar-shin-right {
+    animation: none;
+  }
+}

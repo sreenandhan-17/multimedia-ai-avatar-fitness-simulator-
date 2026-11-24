@@ -1,0 +1,33 @@
+.exercise-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 160px;
+  cursor: pointer;
+}
+
+.exercise-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.exercise-card-3d:hover {
+  border-color: #00e5ff;
+  box-shadow: 0 6px 24px rgba(0, 229, 255, 0.2);
+}
+
+.exercise-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
