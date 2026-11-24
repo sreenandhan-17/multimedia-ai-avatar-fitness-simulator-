@@ -1,0 +1,23 @@
+.posture-figure {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.posture-figure-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.posture-limb {
+  stroke: var(--color-accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.posture-head {
+  fill: var(--color-accent);
+}

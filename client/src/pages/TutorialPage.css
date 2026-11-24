@@ -1,0 +1,142 @@
+.tutorial-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.tutorial-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+  gap: 16px;
+}
+
+.tutorial-progress-track {
+  width: 100%;
+  max-width: 420px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.tutorial-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.2s ease;
+}
+
+.tutorial-step-count {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.tutorial-card {
+  width: min(100%, 420px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* Main step icon: a round badge with a soft accent tint behind an
+   accent-coloured icon. Just a normal block in the card's flow, so it
+   can never sit on top of the heading, text or buttons. */
+.tutorial-step-badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tutorial-step-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.tutorial-step-body {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* Tip rows: left-aligned icon + sentence, stacked, always the same shape
+   regardless of which icon is used so colour is never the only signal. */
+.tutorial-tip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.tutorial-tip-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.tutorial-tip-icon {
+  color: var(--color-accent);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tutorial-safety-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--color-text);
+  margin-top: 4px;
+}
+
+.tutorial-safety-checkbox input {
+  margin-top: 3px;
+}
+
+.tutorial-nav {
+  width: min(100%, 420px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tutorial-nav-left,
+.tutorial-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tutorial-disabled-hint {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  width: 100%;
+}

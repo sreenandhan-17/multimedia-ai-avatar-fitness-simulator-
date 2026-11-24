@@ -1,0 +1,171 @@
+{
+  "days": [
+    { "id": "day-1", "title": "Day 1", "bodyParts": ["Chest", "Arms"] },
+    { "id": "day-2", "title": "Day 2", "bodyParts": ["Back", "Shoulders"] },
+    { "id": "day-3", "title": "Day 3", "bodyParts": ["Legs", "Abdomen"] }
+  ],
+  "exercises": [
+    {
+      "id": "push-up",
+      "name": "Push-up",
+      "day": "day-1",
+      "bodyPart": "Chest",
+      "liveCorrection": true,
+      "instructions": [
+        "Position hands directly under shoulders with fingers spread",
+        "Maintain a straight line through head, spine, and heels",
+        "Inhale and lower until elbows bend to 90 degrees",
+        "Exhale and press back up to high plank"
+      ],
+      "posture": {
+        "animated": true,
+        "loopTimeMs": 2600,
+        "start": { "torso": 75, "arm": -90, "thigh": 0, "shin": 0, "bodyShiftY": 25 },
+        "end": { "torso": 75, "arm": -45, "thigh": 0, "shin": 0, "bodyShiftY": 50 }
+      }
+    },
+    {
+      "id": "dumbbell-chest-press",
+      "name": "Dumbbell chest press",
+      "day": "day-1",
+      "bodyPart": "Chest",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 0, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 0, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "bicep-curl",
+      "name": "Bicep curl",
+      "day": "day-1",
+      "bodyPart": "Arms",
+      "liveCorrection": true,
+      "posture": {
+        "animated": true,
+        "loopTimeMs": 2400,
+        "start": { "torso": 0, "arm": -10, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 0, "arm": -120, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "overhead-triceps-extension",
+      "name": "Overhead triceps extension",
+      "day": "day-1",
+      "bodyPart": "Arms",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 0, "arm": -170, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 0, "arm": -170, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "bent-over-row",
+      "name": "Bent-over row",
+      "day": "day-2",
+      "bodyPart": "Back",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 35, "arm": 10, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 35, "arm": 10, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "superman",
+      "name": "Superman",
+      "day": "day-2",
+      "bodyPart": "Back",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": -20, "arm": -140, "thigh": -10, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": -20, "arm": -140, "thigh": -10, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "shoulder-press",
+      "name": "Shoulder press",
+      "day": "day-2",
+      "bodyPart": "Shoulders",
+      "liveCorrection": false,
+      "posture": {
+        "animated": true,
+        "loopTimeMs": 2800,
+        "start": { "torso": 0, "arm": -40, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 0, "arm": -175, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "lateral-raise",
+      "name": "Lateral raise",
+      "day": "day-2",
+      "bodyPart": "Shoulders",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 0, "arm": -95, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 0, "arm": -95, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "squat",
+      "name": "Squat",
+      "day": "day-3",
+      "bodyPart": "Legs",
+      "liveCorrection": true,
+      "posture": {
+        "animated": true,
+        "loopTimeMs": 3000,
+        "start": { "torso": 0, "arm": -20, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": -15, "arm": -70, "thigh": -70, "shin": 90, "bodyShiftY": 28 }
+      }
+    },
+    {
+      "id": "lunge",
+      "name": "Lunge",
+      "day": "day-3",
+      "bodyPart": "Legs",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 0, "arm": 0, "thigh": -55, "shin": 70, "bodyShiftY": 14 },
+        "end": { "torso": 0, "arm": 0, "thigh": -55, "shin": 70, "bodyShiftY": 14 }
+      }
+    },
+    {
+      "id": "plank",
+      "name": "Plank",
+      "day": "day-3",
+      "bodyPart": "Abdomen",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 70, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
+        "end": { "torso": 70, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      }
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "day": "day-3",
+      "bodyPart": "Abdomen",
+      "liveCorrection": false,
+      "posture": {
+        "animated": false,
+        "loopTimeMs": 2600,
+        "start": { "torso": 45, "arm": 10, "thigh": -40, "shin": 90, "bodyShiftY": 10 },
+        "end": { "torso": 45, "arm": 10, "thigh": -40, "shin": 90, "bodyShiftY": 10 }
+      }
+    }
+  ]
+}

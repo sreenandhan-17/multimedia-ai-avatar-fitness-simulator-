@@ -1,0 +1,79 @@
+.intro-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--login-bg);
+  padding: 24px 16px;
+  gap: 24px;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.intro-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  opacity: 1;
+}
+
+.intro-tagline {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0;
+  opacity: 1;
+}
+
+.intro-title.fade-in,
+.intro-tagline.fade-in {
+  opacity: 0;
+  animation: intro-fade-in 1.2s ease-out 0.4s forwards;
+}
+
+.intro-tagline.fade-in {
+  animation-delay: 0.8s;
+}
+
+@keyframes intro-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.intro-footer {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.intro-progress-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.intro-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.1s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-title.fade-in,
+  .intro-tagline.fade-in {
+    opacity: 1;
+    animation: none;
+  }
+}
