@@ -51,9 +51,13 @@ jobs:
             - Bugs, broken imports, or anything that would crash the app.
             - Any committed secrets: API keys, Firebase service-account keys, or a .env file.
             - Any file over 15 MB (this project keeps avatar.glb files small; see CLAUDE.md).
-            - Any change to client/src/pose/ or client/src/data/exercises.json made by anyone
-              other than sreenandhan-17. If the PR author is sreenandhan-17, this is fine;
-              otherwise flag it clearly, since pose/rep-counting logic should stay with Balu.
+            - Any change to client/src/pose/ made by anyone other than sreenandhan-17. If the
+              PR author is sreenandhan-17, this is fine; otherwise flag it clearly, since
+              pose/rep-counting logic should stay with Balu.
+            - In client/src/data/exercises.json, the same rule applies only to "liveCorrection"
+              values and to angle-rule/threshold fields: flag those if changed by anyone other
+              than sreenandhan-17. Posture fields (start, end, animated, loopTimeMs) may be
+              changed by anyone; do not flag those.
 
             Reporting:
             - Post inline comments on the specific lines where you found a problem.
@@ -67,4 +71,4 @@ jobs:
             comment only; a human (Balu) makes the final call.
 
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh issue view:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh issue view:*),Read,Glob,Grep"
