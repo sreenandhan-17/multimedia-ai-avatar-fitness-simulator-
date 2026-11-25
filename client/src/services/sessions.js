@@ -3,7 +3,7 @@
 
 const STORAGE_KEY = "fas_sessions";
 
-const SAMPLE_EXERCISE_IDS = ["squat", "bicep_curl", "pushup", "lunge", "plank", "shoulder_press"];
+const SAMPLE_EXERCISE_IDS = ["squat", "bicep-curl", "push-up", "lunge", "plank", "shoulder-press"];
 const SAMPLE_MISTAKES = ["Go lower", "Slow down", "Keep back straight", "Full range of motion"];
 
 // Reads the raw session list from localStorage. Never throws: bad or missing data becomes [].
