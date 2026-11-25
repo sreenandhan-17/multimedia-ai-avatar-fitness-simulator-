@@ -1,20 +1,21 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PostureFigure from './PostureFigure';
 import AvatarCanvas from './AvatarCanvas';
 import './ExerciseCard.css';
 
-// Displays either the interactive 3D humanoid avatar canvas (for Push-up & Bicep curl)
-// or the posture figure for other exercises.
+// Shows the exercise's 3D avatar clip, or the posture stick figure if there is no clip
+// or the 3D model cannot be loaded.
 export default function ExerciseCard({ exercise }) {
-  const is3D = exercise.id === 'push-up' || exercise.id === 'bicep-curl';
+  const [show3D, setShow3D] = useState(Boolean(exercise.avatarClip));
 
   return (
     <Link
       to={`/workout/${exercise.id}`}
-      className={`exercise-card ${is3D ? 'exercise-card-3d' : ''}`}
+      className={`exercise-card ${show3D ? 'exercise-card-3d' : ''}`}
     >
-      {is3D ? (
-        <AvatarCanvas exerciseId={exercise.id} />
+      {show3D ? (
+        <AvatarCanvas exerciseId={exercise.id} onFallback={() => setShow3D(false)} />
       ) : (
         <PostureFigure posture={exercise.posture} />
       )}

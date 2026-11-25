@@ -8,6 +8,8 @@
     {
       "id": "push-up",
       "name": "Push-up",
+      "avatarClip": "push_up",
+      "avatarView": "side",
       "day": "day-1",
       "bodyPart": "Chest",
       "liveCorrection": true,
@@ -27,6 +29,8 @@
     {
       "id": "dumbbell-chest-press",
       "name": "Dumbbell chest press",
+      "avatarClip": "dumbbell_chest_press",
+      "avatarView": "side",
       "day": "day-1",
       "bodyPart": "Chest",
       "liveCorrection": false,
@@ -40,6 +44,8 @@
     {
       "id": "bicep-curl",
       "name": "Bicep curl",
+      "avatarClip": "bicep_curl",
+      "avatarView": "side",
       "day": "day-1",
       "bodyPart": "Arms",
       "liveCorrection": true,
@@ -53,6 +59,8 @@
     {
       "id": "overhead-triceps-extension",
       "name": "Overhead triceps extension",
+      "avatarClip": "overhead_triceps_extension",
+      "avatarView": "side",
       "day": "day-1",
       "bodyPart": "Arms",
       "liveCorrection": false,
@@ -66,6 +74,8 @@
     {
       "id": "bent-over-row",
       "name": "Bent-over row",
+      "avatarClip": "bent_over_row",
+      "avatarView": "side",
       "day": "day-2",
       "bodyPart": "Back",
       "liveCorrection": false,
@@ -79,6 +89,8 @@
     {
       "id": "superman",
       "name": "Superman",
+      "avatarClip": "superman",
+      "avatarView": "side",
       "day": "day-2",
       "bodyPart": "Back",
       "liveCorrection": false,
@@ -92,6 +104,8 @@
     {
       "id": "shoulder-press",
       "name": "Shoulder press",
+      "avatarClip": "shoulder_press",
+      "avatarView": "front",
       "day": "day-2",
       "bodyPart": "Shoulders",
       "liveCorrection": false,
@@ -105,6 +119,8 @@
     {
       "id": "lateral-raise",
       "name": "Lateral raise",
+      "avatarClip": "lateral_raise",
+      "avatarView": "front",
       "day": "day-2",
       "bodyPart": "Shoulders",
       "liveCorrection": false,
@@ -118,6 +134,8 @@
     {
       "id": "squat",
       "name": "Squat",
+      "avatarClip": "squat",
+      "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Legs",
       "liveCorrection": true,
@@ -131,6 +149,8 @@
     {
       "id": "lunge",
       "name": "Lunge",
+      "avatarClip": "lunge",
+      "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Legs",
       "liveCorrection": false,
@@ -144,6 +164,8 @@
     {
       "id": "plank",
       "name": "Plank",
+      "avatarClip": "plank",
+      "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Abdomen",
       "liveCorrection": false,
@@ -157,6 +179,8 @@
     {
       "id": "crunch",
       "name": "Crunch",
+      "avatarClip": "crunch",
+      "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Abdomen",
       "liveCorrection": false,

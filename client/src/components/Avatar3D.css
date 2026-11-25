@@ -9,6 +9,11 @@
   border-radius: 8px;
 }
 
+.avatar-3d-stage {
+  position: absolute;
+  inset: 0;
+}
+
 .avatar-3d-canvas {
   width: 100% !important;
   height: 100% !important;
