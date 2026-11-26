@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { saveSession } from '../services/sessions';
 
 const DEFAULT_TARGET_SETS = 3;
 const DEFAULT_TARGET_REPS = 15;
 const DEFAULT_REST_SECONDS = 30; // 30-second rest interval
 
 export function useWorkoutSession({
+  exerciseId,
   targetSets = DEFAULT_TARGET_SETS,
   targetReps = DEFAULT_TARGET_REPS,
   restDuration = DEFAULT_REST_SECONDS,
@@ -34,6 +36,7 @@ export function useWorkoutSession({
   }, []);
 
   const timerRef = useRef(null);
+  const hasSavedRef = useRef(false);
 
   // Active workout duration timer
   useEffect(() => {
@@ -193,6 +196,7 @@ export function useWorkoutSession({
     setWorkoutRepScores([]);
     setAccuracy(100);
     setFeedback('Ready for a new session. Let’s go!');
+    hasSavedRef.current = false;
   }, [restDuration]);
 
   // Dev simulation helpers
@@ -220,6 +224,32 @@ export function useWorkoutSession({
   const averageTempo = totalRepsAttempted > 0
     ? (totalRepDuration / totalRepsAttempted).toFixed(1)
     : '0.0';
+
+  // Save the finished workout exactly once. hasSavedRef is set before the
+  // await so a second effect run (React Strict Mode, or a re-render while
+  // the save is in flight) can't save the same workout twice.
+  useEffect(() => {
+    if (!isFinished || hasSavedRef.current) return;
+    hasSavedRef.current = true;
+
+    (async () => {
+      try {
+        await saveSession({
+          id: String(Date.now()),
+          date: new Date().toISOString(),
+          exerciseId,
+          sets: targetSets,
+          reps: totalGoodReps,
+          accuracy: overallAccuracy,
+          avgTempo: Number(averageTempo),
+          durationSeconds: elapsedSeconds,
+          mistakes,
+        });
+      } catch (error) {
+        console.error('Could not save finished workout session:', error);
+      }
+    })();
+  }, [isFinished, exerciseId, targetSets, totalGoodReps, overallAccuracy, averageTempo, elapsedSeconds, mistakes]);
 
   return {
     currentSet,
