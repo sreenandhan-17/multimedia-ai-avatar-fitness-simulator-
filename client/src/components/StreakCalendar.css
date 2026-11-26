@@ -1,0 +1,52 @@
+.streak-calendar-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.streak-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.streak-calendar-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.streak-calendar-count {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.streak-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
+  gap: 6px;
+}
+
+.streak-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+}
+
+.streak-day-cell.active {
+  background-color: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+  color: var(--color-bg);
+  font-weight: 700;
+}

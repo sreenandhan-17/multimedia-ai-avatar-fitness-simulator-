@@ -5,6 +5,7 @@ import TutorialPage from './pages/TutorialPage';
 import SplitPage from './pages/SplitPage';
 import ExerciseListPage from './pages/ExerciseListPage';
 import WorkoutPage from './pages/WorkoutPage';
+import DashboardPage from './pages/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useTheme } from './hooks/useTheme';
 
@@ -45,6 +46,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <WorkoutPage theme={theme} toggleTheme={toggleTheme} />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage theme={theme} toggleTheme={toggleTheme} />
           </ProtectedRoute>
         }
       />
