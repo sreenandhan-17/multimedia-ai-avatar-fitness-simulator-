@@ -1,17 +1,23 @@
 import { Navigate } from 'react-router-dom';
 import IntroPage from './IntroPage';
+import { useAuth } from '../hooks/useAuth';
 
 // Decides what "/" means: the intro on the very first visit, otherwise
 // whichever page the user should land on next.
 export default function IntroGate({ theme, toggleTheme }) {
+  const { user, loading } = useAuth();
   const introSeen = localStorage.getItem('fitness-avatar-intro-seen') === 'true';
 
   if (!introSeen) {
     return <IntroPage theme={theme} toggleTheme={toggleTheme} />;
   }
 
-  const loggedIn = localStorage.getItem('fitness-avatar-logged-in') === 'true';
-  if (!loggedIn) {
+  // Wait for Firebase to check the saved login before deciding where to go.
+  if (loading) {
+    return <p className="auth-loading" role="status">Loading...</p>;
+  }
+
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
