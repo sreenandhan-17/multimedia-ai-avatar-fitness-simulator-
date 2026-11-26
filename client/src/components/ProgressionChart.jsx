@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toLocalDayKey } from '../utils/dateKeys';
 import './ProgressionChart.css';
 
 const CHART_WIDTH = 600;
@@ -11,7 +12,7 @@ function getRepsByDay(sessions) {
   const repsByDay = {};
   for (let i = 0; i < sessions.length; i++) {
     const session = sessions[i];
-    const dayKey = new Date(session.date).toISOString().slice(0, 10);
+    const dayKey = toLocalDayKey(new Date(session.date));
     repsByDay[dayKey] = (repsByDay[dayKey] || 0) + (session.reps || 0);
   }
 
@@ -30,7 +31,7 @@ function getAccuracyBySession(sessions) {
   const points = [];
   for (let i = 0; i < chronological.length; i++) {
     const session = chronological[i];
-    const dayKey = new Date(session.date).toISOString().slice(0, 10);
+    const dayKey = toLocalDayKey(new Date(session.date));
     points.push({ label: dayKey, value: session.accuracy || 0 });
   }
   return points;

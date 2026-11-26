@@ -1,16 +1,13 @@
+import { toLocalDayKey } from '../utils/dateKeys';
 import './StreakCalendar.css';
 
 const MAX_GRID_DAYS = 30;
-
-function toDayKey(date) {
-  return date.toISOString().slice(0, 10);
-}
 
 // Builds the set of calendar days (YYYY-MM-DD) that have at least one session.
 function getActiveDayKeys(sessions) {
   const activeDays = new Set();
   for (let i = 0; i < sessions.length; i++) {
-    activeDays.add(toDayKey(new Date(sessions[i].date)));
+    activeDays.add(toLocalDayKey(new Date(sessions[i].date)));
   }
   return activeDays;
 }
@@ -24,21 +21,23 @@ function getCurrentStreak(activeDayKeys) {
 
   let streak = 0;
   let cursor = new Date(today);
-  if (!activeDayKeys.has(toDayKey(cursor))) {
+  if (!activeDayKeys.has(toLocalDayKey(cursor))) {
     cursor.setDate(cursor.getDate() - 1);
   }
 
-  while (activeDayKeys.has(toDayKey(cursor))) {
+  while (activeDayKeys.has(toLocalDayKey(cursor))) {
     streak += 1;
     cursor.setDate(cursor.getDate() - 1);
   }
   return streak;
 }
 
-export default function StreakCalendar({ sessions, rangeDays }) {
+// `streakSessions` should be every saved session (not filtered by the time
+// range) so picking "7 days" in the filter can't cap the streak count.
+export default function StreakCalendar({ sessions, streakSessions, rangeDays }) {
   const gridDays = rangeDays ? Math.min(rangeDays, MAX_GRID_DAYS) : MAX_GRID_DAYS;
   const activeDayKeys = getActiveDayKeys(sessions);
-  const streak = getCurrentStreak(activeDayKeys);
+  const streak = getCurrentStreak(getActiveDayKeys(streakSessions || sessions));
 
   const days = [];
   const today = new Date();
@@ -46,7 +45,8 @@ export default function StreakCalendar({ sessions, rangeDays }) {
   for (let i = gridDays - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
-    days.push({ key: toDayKey(date), dayOfMonth: date.getDate(), active: activeDayKeys.has(toDayKey(date)) });
+    const key = toLocalDayKey(date);
+    days.push({ key, dayOfMonth: date.getDate(), active: activeDayKeys.has(key) });
   }
 
   return (
