@@ -38,7 +38,7 @@ Read `docs/IMPLEMENTATION_PLAN.md` for the phases. Work on one phase at a time, 
 - Day 1: Chest and Arms. Day 2: Back and Shoulders. Day 3: Legs and Abdomen.
 - Two exercises per group, defined in `client/src/exercises/exercises.json`. Adding an exercise should only need a JSON entry and its angle rules.
 - Each exercise card shows the exercise name and an animated avatar of the correct posture. Nothing else (no badges, no search, no favourites).
-- `liveCorrection` is true only for **squat** and **bicep curl**. Other exercises are demo only.
+- `liveCorrection` is true for all 12 exercises (generic tracker, issue #15/#22). Angle thresholds for the 9 exercises added after squat/curl/push-up are still untested placeholders until real-rep testing confirms them.
 
 **Workout screen:** side by side on laptops (avatar left, camera right), stacked on phones. Feedback text box beside the camera. Counters: reps, set, live accuracy, tempo, timer. Defaults: 3 sets of 15 reps, 60 s rest with a Skip rest button. A final summary screen at the end (reps, sets, accuracy, tempo, time, mistakes with counts).
 
