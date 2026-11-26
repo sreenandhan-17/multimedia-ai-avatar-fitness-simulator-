@@ -10,32 +10,42 @@ import {
 } from 'firebase/auth';
 import { auth } from './firebase';
 
+// Every function calls this first, so a missing .env gives a clear message and not a crash.
+function requireAuth() {
+  if (!auth) {
+    const error = new Error('Firebase is not configured');
+    error.code = 'app/not-configured';
+    throw error;
+  }
+  return auth;
+}
+
 // Creates the account and saves the name the user typed.
 export async function signUp(name, email, password) {
-  const result = await createUserWithEmailAndPassword(auth, email.trim(), password);
+  const result = await createUserWithEmailAndPassword(requireAuth(), email.trim(), password);
   await updateProfile(result.user, { displayName: name.trim() });
   return result.user;
 }
 
 export async function signIn(email, password) {
-  const result = await signInWithEmailAndPassword(auth, email.trim(), password);
+  const result = await signInWithEmailAndPassword(requireAuth(), email.trim(), password);
   return result.user;
 }
 
 // Opens the Google popup. Must be called straight from a click, or browsers block it.
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider);
+  const result = await signInWithPopup(requireAuth(), provider);
   return result.user;
 }
 
 export async function signOutUser() {
-  await signOut(auth);
+  await signOut(requireAuth());
 }
 
 // Firebase sends the reset email itself.
 export async function sendResetEmail(email) {
-  await sendPasswordResetEmail(auth, email.trim());
+  await sendPasswordResetEmail(requireAuth(), email.trim());
 }
 
 // Turns a Firebase error into a sentence a user can understand.
@@ -48,6 +58,7 @@ export function getAuthErrorMessage(error) {
   }
 
   const messages = {
+    'app/not-configured': 'Login is not set up on this computer yet. Create client/.env first.',
     'auth/invalid-credential': 'Wrong email or password.',
     'auth/invalid-login-credentials': 'Wrong email or password.',
     'auth/user-not-found': 'Wrong email or password.',

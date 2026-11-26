@@ -16,7 +16,12 @@ const firebaseConfig = {
 // True when the .env file is filled in. The login screen uses this to show a clear message.
 export const firebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
 
-const app = initializeApp(firebaseConfig);
+// Without a filled-in .env, Firebase throws on start-up and the page goes blank.
+// So we only start it when the keys exist. Otherwise auth and db stay null.
+let app = null;
+if (firebaseConfigured) {
+  app = initializeApp(firebaseConfig);
+}
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
