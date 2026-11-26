@@ -24,7 +24,16 @@ function readSessionsFromStorage() {
     if (!Array.isArray(parsed)) {
       return [];
     }
-    return parsed;
+
+    // Keep only real objects. A stray null or number would crash the sort and sample code.
+    const validSessions = [];
+    for (let i = 0; i < parsed.length; i++) {
+      const entry = parsed[i];
+      if (entry !== null && typeof entry === "object" && !Array.isArray(entry)) {
+        validSessions.push(entry);
+      }
+    }
+    return validSessions;
   } catch (error) {
     return [];
   }
