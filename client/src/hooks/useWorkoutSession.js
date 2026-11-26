@@ -105,7 +105,11 @@ export function useWorkoutSession({
 
       setWorkoutRepScores((prev) => [...prev, score]);
 
-      const repIsGood = correct && score >= 70;
+      // The tracker's own "correct" flag is just score >= 70, so a rep with
+      // one penalty (-15 or -25) still comes through as correct: true. The
+      // only way to know no penalty fired at all is a clean, unpenalised
+      // score of 100 -- that is what "no unresolved penalty" means here.
+      const repIsGood = correct && score === 100;
 
       if (repIsGood) {
         setTotalGoodReps((g) => g + 1);
