@@ -273,3 +273,20 @@
   color: var(--color-text-muted);
   font-size: 1rem;
 }
+
+/* 360px check: hero already stacks under 860px, but the CTA button stays
+   fit-content and the avatar stage can still feel tall on a small phone.
+   Force a true full-width button and cap the avatar height here instead. */
+@media (max-width: 600px) {
+  .home-cta-btn {
+    width: 100%;
+  }
+
+  .home-hero-avatar {
+    height: 260px;
+  }
+
+  .home-how-grid {
+    grid-template-columns: 1fr;
+  }
+}
