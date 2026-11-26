@@ -24,6 +24,39 @@
         "loopTimeMs": 2600,
         "start": { "torso": 75, "arm": -90, "thigh": 0, "shin": 0, "bodyShiftY": 25 },
         "end": { "torso": 75, "arm": -45, "thigh": 0, "shin": 0, "bodyShiftY": 50 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["shoulder", "elbow", "wrist"],
+        "startAngle": 160,
+        "descentAngle": 135,
+        "targetAngle": 90,
+        "targetAngleMax": 95,
+        "ascentAngle": 140,
+        "safetyMin": 30,
+        "minRepSeconds": 2.5,
+        "postureCheck": {
+          "a": "shoulder",
+          "b": "hip",
+          "maxTiltDeg": 35,
+          "cue": "Get into a plank on the floor to start push-ups."
+        },
+        "extraChecks": [
+          {
+            "joints": ["shoulder", "hip", "ankle"],
+            "min": 155,
+            "max": 200,
+            "cue": "Don't sag or pike your hips! Keep your core tight."
+          }
+        ],
+        "cues": {
+          "descending": "Lowering down... reach 90° depth",
+          "partialDepth": "Good depth! Now press all the way up.",
+          "shallow": "Push-up too shallow! Lower your chest further.",
+          "good": "Great push-up!",
+          "safety": "That elbow angle looks extreme. Ease up and reset your plank."
+        }
       }
     },
     {
@@ -54,6 +87,25 @@
         "loopTimeMs": 2400,
         "start": { "torso": 0, "arm": -10, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 0, "arm": -120, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["shoulder", "elbow", "wrist"],
+        "startAngle": 150,
+        "descentAngle": 120,
+        "targetAngle": 65,
+        "targetAngleMax": 75,
+        "ascentAngle": 95,
+        "safetyMax": 175,
+        "minRepSeconds": 2.5,
+        "cues": {
+          "descending": "Curling up...",
+          "partialDepth": "Good, curl a little higher for full contraction.",
+          "shallow": "Curl higher! Not enough contraction.",
+          "good": "Great curl!",
+          "safety": "Don't hyperextend your elbow at the bottom."
+        }
       }
     },
     {
@@ -144,6 +196,25 @@
         "loopTimeMs": 3000,
         "start": { "torso": 0, "arm": -20, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": -15, "arm": -70, "thigh": -70, "shin": 90, "bodyShiftY": 28 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["hip", "knee", "ankle"],
+        "startAngle": 160,
+        "descentAngle": 140,
+        "targetAngle": 90,
+        "targetAngleMax": 100,
+        "ascentAngle": 130,
+        "safetyMin": 40,
+        "minRepSeconds": 2.5,
+        "cues": {
+          "descending": "Lowering down... reach target depth",
+          "partialDepth": "Good effort, go a little lower next time.",
+          "shallow": "Go lower! That squat wasn't deep enough.",
+          "good": "Great squat!",
+          "safety": "That knee angle looks extreme. Stand up and reset."
+        }
       }
     },
     {
