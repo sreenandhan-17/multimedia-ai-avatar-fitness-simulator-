@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import TopBar from '../components/TopBar';
 import ProgressionChart from '../components/ProgressionChart';
+import StreakCalendar from '../components/StreakCalendar';
 import { getSessionsSince, addSampleSessions } from '../services/sessions';
 import exercisesData from '../data/exercises.json';
 import './DashboardPage.css';
@@ -106,7 +107,12 @@ export default function DashboardPage({ theme, toggleTheme }) {
           </div>
         )}
 
-        {!loading && sessions.length > 0 && <ProgressionChart sessions={sessions} />}
+        {!loading && sessions.length > 0 && (
+          <div className="dashboard-charts-row">
+            <ProgressionChart sessions={sessions} />
+            <StreakCalendar sessions={sessions} rangeDays={filterDays} />
+          </div>
+        )}
       </main>
     </div>
   );
