@@ -1,34 +1,26 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 import ThemeToggle from '../components/ThemeToggle';
+import { useAuth } from '../hooks/useAuth';
 import './LoginPage.css';
 
 export default function LoginPage({ theme, toggleTheme }) {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
 
-  function handleAuthSuccess() {
-    localStorage.setItem('fitness-avatar-logged-in', 'true');
-
+  function getNextPage() {
     const tutorialDone = localStorage.getItem('fitness-avatar-tutorial-done') === 'true';
-    navigate(tutorialDone ? '/split' : '/tutorial');
+    return tutorialDone ? '/split' : '/tutorial';
   }
 
-  // Handle return callbacks from Google Login / OAuth
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const hash = window.location.hash;
-    const isGoogleCallback =
-      params.get('google') === 'success' ||
-      params.get('auth') === 'google' ||
-      params.has('code') ||
-      hash.includes('access_token') ||
-      hash.includes('id_token');
+  function handleAuthSuccess() {
+    navigate(getNextPage());
+  }
 
-    if (isGoogleCallback) {
-      handleAuthSuccess();
-    }
-  }, []);
+  // Already logged in (for example after a refresh): skip the login screen.
+  if (!loading && user) {
+    return <Navigate to={getNextPage()} replace />;
+  }
 
   return (
     <div className="login-page">

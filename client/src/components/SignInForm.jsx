@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import Icon from './Icon';
 import { isValidEmail, isValidPassword } from '../utils/validators';
+import { getAuthErrorMessage, signIn } from '../services/auth';
 
 export default function SignInForm({ onSuccess, onForgotPassword }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const nextErrors = {};
@@ -20,10 +23,21 @@ export default function SignInForm({ onSuccess, onForgotPassword }) {
     }
     setErrors(nextErrors);
 
+    setFormError('');
+
     const hasErrors = Object.keys(nextErrors).length > 0;
-    if (!hasErrors) {
-      onSuccess();
+    if (hasErrors) {
+      return;
     }
+
+    setSubmitting(true);
+    try {
+      await signIn(email, password);
+      onSuccess();
+    } catch (error) {
+      setFormError(getAuthErrorMessage(error));
+    }
+    setSubmitting(false);
   }
 
   return (
@@ -77,8 +91,14 @@ export default function SignInForm({ onSuccess, onForgotPassword }) {
         Forgot password?
       </button>
 
-      <button type="submit" className="primary-button btn-md">
-        Sign in
+      {formError && (
+        <p className="field-error" role="alert">
+          {formError}
+        </p>
+      )}
+
+      <button type="submit" className="primary-button btn-md" disabled={submitting}>
+        {submitting ? 'Signing in...' : 'Sign in'}
       </button>
     </form>
   );
