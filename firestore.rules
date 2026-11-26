@@ -1,11 +1,40 @@
 rules_version = '2';
 
-// Each user can read and write only their own workout sessions.
+// Each user can read, write and delete only their own workout sessions,
+// and every session that is written must have the expected shape.
 // Everything not listed here is denied by default.
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // True when the signed-in user owns the users/{uid} path.
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // True when the session being written has the allowed fields, types and ranges.
+    // id, date and exerciseId are required. The other fields are optional,
+    // but must be valid when they are present.
+    function isValidSession(sessionId) {
+      let data = request.resource.data;
+      return data.keys().hasOnly([
+          'id', 'date', 'exerciseId', 'sets', 'reps',
+          'accuracy', 'avgTempo', 'durationSeconds', 'mistakes'
+        ])
+        && data.keys().hasAll(['id', 'date', 'exerciseId'])
+        && data.id == sessionId
+        && data.exerciseId is string && data.exerciseId.size() <= 64
+        && data.date is string && data.date.size() <= 40
+        && (!('sets' in data) || (data.sets is int && data.sets >= 0 && data.sets <= 1000))
+        && (!('reps' in data) || (data.reps is int && data.reps >= 0 && data.reps <= 1000))
+        && (!('accuracy' in data) || (data.accuracy is number && data.accuracy >= 0 && data.accuracy <= 100))
+        && (!('avgTempo' in data) || (data.avgTempo is number && data.avgTempo >= 0 && data.avgTempo <= 60))
+        && (!('durationSeconds' in data) || (data.durationSeconds is number && data.durationSeconds >= 0 && data.durationSeconds <= 86400))
+        && (!('mistakes' in data) || (data.mistakes is map && data.mistakes.size() <= 20));
+    }
+
     match /users/{uid}/sessions/{sessionId} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid) && isValidSession(sessionId);
     }
   }
 }
