@@ -50,6 +50,11 @@ function writeSessionsToStorage(sessions) {
 
 // Saves one finished workout session, newest sessions are kept first.
 export async function saveSession(session) {
+  // Ignore anything that is not a session object, it would be dropped on the next read anyway.
+  if (session === null || typeof session !== "object" || Array.isArray(session)) {
+    return;
+  }
+
   const sessions = readSessionsFromStorage();
   sessions.unshift(session);
   writeSessionsToStorage(sessions);
