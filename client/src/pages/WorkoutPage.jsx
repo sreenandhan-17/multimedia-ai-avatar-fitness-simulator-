@@ -63,6 +63,7 @@ export default function WorkoutPage({ theme, toggleTheme }) {
 
   // Workout Session State Hook (Phase 4 & Task 5: 3 sets of 15 reps, 30s rest)
   const session = useWorkoutSession({
+    exerciseId: exercise.id,
     targetSets: 3,
     targetReps: 15,
     restDuration: 30,

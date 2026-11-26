@@ -5,6 +5,7 @@ const DEFAULT_TARGET_REPS = 15;
 const DEFAULT_REST_SECONDS = 30; // 30-second rest interval
 
 export function useWorkoutSession({
+  exerciseId,
   targetSets = DEFAULT_TARGET_SETS,
   targetReps = DEFAULT_TARGET_REPS,
   restDuration = DEFAULT_REST_SECONDS,
