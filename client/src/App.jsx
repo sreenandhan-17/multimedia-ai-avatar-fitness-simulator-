@@ -14,7 +14,7 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<LoginPage theme={theme} toggleTheme={toggleTheme} />} />
+      <Route path="/" element={<IntroGate theme={theme} toggleTheme={toggleTheme} />} />
       <Route path="/login" element={<LoginPage theme={theme} toggleTheme={toggleTheme} />} />
       <Route path="/intro" element={<IntroGate theme={theme} toggleTheme={toggleTheme} />} />
       <Route
