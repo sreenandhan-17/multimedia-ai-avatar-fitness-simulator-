@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import TopBar from '../components/TopBar';
 import ProgressionChart from '../components/ProgressionChart';
 import StreakCalendar from '../components/StreakCalendar';
-import { getSessionsSince, addSampleSessions } from '../services/sessions';
+import { getSessions, getSessionsSince, addSampleSessions } from '../services/sessions';
 import exercisesData from '../data/exercises.json';
 import './DashboardPage.css';
 
@@ -12,6 +12,19 @@ const FILTERS = [
   { label: 'All time', days: null },
 ];
 
+// Drops any session with a missing or unparseable date. sessions.js stores
+// whatever it's given, so one bad record must not blank the whole dashboard.
+function getSessionsWithValidDates(sessions) {
+  const validSessions = [];
+  for (let i = 0; i < sessions.length; i++) {
+    const time = new Date(sessions[i].date).getTime();
+    if (!Number.isNaN(time)) {
+      validSessions.push(sessions[i]);
+    }
+  }
+  return validSessions;
+}
+
 // Looks up an exercise's display name from its id. Falls back to the raw id
 // so a removed or renamed exercise still shows something readable.
 function getExerciseName(exerciseId) {
@@ -19,31 +32,35 @@ function getExerciseName(exerciseId) {
   return exercise ? exercise.name : exerciseId;
 }
 
-// Sums mistake counts across all sessions, grouped by exercise, then
-// flattens to a single list sorted by count so the worst habits show first.
+// Sums mistake counts across all sessions, grouped by exercise then by
+// mistake text, then flattens to a single list sorted by count so the
+// worst habits show first.
 function getTopMistakes(sessions, limit) {
-  const countsByExerciseAndMistake = {};
+  const countsByExercise = new Map();
   for (let i = 0; i < sessions.length; i++) {
     const session = sessions[i];
     const mistakeNames = Object.keys(session.mistakes || {});
+    if (mistakeNames.length === 0) {
+      continue;
+    }
+
+    if (!countsByExercise.has(session.exerciseId)) {
+      countsByExercise.set(session.exerciseId, new Map());
+    }
+    const countsByMistake = countsByExercise.get(session.exerciseId);
+
     for (let j = 0; j < mistakeNames.length; j++) {
       const mistakeName = mistakeNames[j];
-      const key = session.exerciseId + '::' + mistakeName;
       const count = session.mistakes[mistakeName];
-      countsByExerciseAndMistake[key] = (countsByExerciseAndMistake[key] || 0) + count;
+      countsByMistake.set(mistakeName, (countsByMistake.get(mistakeName) || 0) + count);
     }
   }
 
   const rows = [];
-  const keys = Object.keys(countsByExerciseAndMistake);
-  for (let i = 0; i < keys.length; i++) {
-    const [exerciseId, mistakeName] = keys[i].split('::');
-    rows.push({
-      exerciseId,
-      exerciseName: getExerciseName(exerciseId),
-      mistakeName,
-      count: countsByExerciseAndMistake[keys[i]],
-    });
+  for (const [exerciseId, countsByMistake] of countsByExercise) {
+    for (const [mistakeName, count] of countsByMistake) {
+      rows.push({ exerciseId, exerciseName: getExerciseName(exerciseId), mistakeName, count });
+    }
   }
 
   rows.sort((a, b) => b.count - a.count);
@@ -97,12 +114,19 @@ function getNextSessionSuggestion(sessions) {
 export default function DashboardPage({ theme, toggleTheme }) {
   const [filterDays, setFilterDays] = useState(30);
   const [sessions, setSessions] = useState([]);
+  const [allSessions, setAllSessions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // allSessions (unfiltered by time range) feeds the streak count, so
+  // picking "7 days" in the filter can't cap how long a streak can be.
   const loadSessions = useCallback(async () => {
     setLoading(true);
-    const result = await getSessionsSince(filterDays);
-    setSessions(result);
+    const [filteredResult, allResult] = await Promise.all([
+      getSessionsSince(filterDays),
+      getSessions(),
+    ]);
+    setSessions(getSessionsWithValidDates(filteredResult));
+    setAllSessions(getSessionsWithValidDates(allResult));
     setLoading(false);
   }, [filterDays]);
 
@@ -187,7 +211,7 @@ export default function DashboardPage({ theme, toggleTheme }) {
         {!loading && sessions.length > 0 && (
           <div className="dashboard-charts-row">
             <ProgressionChart sessions={sessions} />
-            <StreakCalendar sessions={sessions} rangeDays={filterDays} />
+            <StreakCalendar sessions={sessions} streakSessions={allSessions} rangeDays={filterDays} />
           </div>
         )}
 
@@ -199,8 +223,8 @@ export default function DashboardPage({ theme, toggleTheme }) {
                 <p className="dashboard-status-text">No mistakes logged. Keep it up!</p>
               ) : (
                 <ul className="dashboard-mistakes-list">
-                  {topMistakes.map((row) => (
-                    <li key={row.exerciseId + row.mistakeName} className="dashboard-mistake-row">
+                  {topMistakes.map((row, index) => (
+                    <li key={`${row.exerciseId}-${index}-${row.mistakeName}`} className="dashboard-mistake-row">
                       <span className="dashboard-mistake-text">
                         {row.exerciseName}: {row.mistakeName}
                       </span>
