@@ -408,11 +408,14 @@ async function uploadPendingSessions(uid) {
       await withTimeout(saveSessionToFirestore(uid, session));
       removePendingSession(uid, session.id);
     } catch (error) {
-      // A rejected session (rules) can never succeed, so remove it instead of retrying
-      // forever. Anything else is most likely a connection problem: keep it queued and
-      // stop here, so the remaining sessions get a turn on the next sync.
-      const isRejected = error && (error.code === "permission-denied" || error.code === "invalid-argument");
-      if (isRejected) {
+      // Only "invalid-argument" means the data itself is wrong, which no retry can fix,
+      // so that session is dropped instead of retried forever. "permission-denied" is not
+      // treated the same way: it can also happen with a not-yet-deployed rules change or a
+      // stale login token, both temporary, so dropping it could lose a real workout. Any
+      // other error is most likely a connection problem: keep everything queued and stop
+      // here, so the remaining sessions get a turn on the next sync.
+      const isPermanentlyInvalid = error && error.code === "invalid-argument";
+      if (isPermanentlyInvalid) {
         console.warn("Dropping a pending session the server will never accept:", error);
         removePendingSession(uid, session.id);
         continue;
