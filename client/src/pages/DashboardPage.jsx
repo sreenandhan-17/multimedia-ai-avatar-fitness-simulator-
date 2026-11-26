@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import TopBar from '../components/TopBar';
+import ProgressionChart from '../components/ProgressionChart';
 import { getSessionsSince, addSampleSessions } from '../services/sessions';
 import exercisesData from '../data/exercises.json';
 import './DashboardPage.css';
@@ -104,6 +105,8 @@ export default function DashboardPage({ theme, toggleTheme }) {
             </div>
           </div>
         )}
+
+        {!loading && sessions.length > 0 && <ProgressionChart sessions={sessions} />}
       </main>
     </div>
   );

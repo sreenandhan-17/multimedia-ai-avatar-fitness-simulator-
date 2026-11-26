@@ -1,0 +1,82 @@
+.progression-chart-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progression-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.progression-chart-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.progression-chart-toggle {
+  display: flex;
+  gap: 4px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.progression-toggle-btn {
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border-radius: 6px;
+}
+
+.progression-toggle-btn:hover {
+  color: var(--color-text);
+}
+
+.progression-toggle-btn.active {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.progression-chart-empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.progression-chart-svg {
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+}
+
+.progression-axis-line {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.progression-line {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.progression-dot {
+  fill: var(--color-accent);
+}
+
+.progression-bar {
+  fill: var(--color-accent);
+}
