@@ -225,6 +225,33 @@
   .hud-counters-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Two gender buttons side by side don't fit at 360px; stack them instead
+     of letting them overflow the card. */
+  .avatar-gender-selector {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .gender-btn {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  /* A long exercise name in the tutorial modal heading can push the close
+     button out of the row; let the row wrap instead. */
+  .modal-header-row {
+    flex-wrap: wrap;
+  }
+
+  .modal-close-btn {
+    flex-shrink: 0;
+  }
+
+  /* Three summary-modal actions side by side get too cramped at 360px. */
+  .modal-actions-row {
+    flex-direction: column;
+  }
 }
 
 .hud-counter-card {
