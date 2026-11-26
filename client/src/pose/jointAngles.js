@@ -89,8 +89,8 @@ export function jointMidpoint(landmarks, jointName) {
   return null;
 }
 
-// Angle of the line between two joints' midpoints, measured from horizontal.
-// Used for a posture check like "stay in a flat plank" (push-up).
+// Angle of the line between two joints' midpoints, measured from horizontal
+// (0 = flat/horizontal, 90 = upright/vertical).
 export function tiltFromHorizontalDeg(landmarks, jointNameA, jointNameB) {
   const pointA = jointMidpoint(landmarks, jointNameA);
   const pointB = jointMidpoint(landmarks, jointNameB);
@@ -100,6 +100,35 @@ export function tiltFromHorizontalDeg(landmarks, jointNameA, jointNameB) {
   const deltaX = pointB.x - pointA.x;
   const deltaY = pointB.y - pointA.y;
   return Math.round(Math.atan2(Math.abs(deltaY), Math.abs(deltaX) + 1e-6) * (180 / Math.PI));
+}
+
+// How far the line between two joints has drifted from a reference axis.
+// 0 = perfectly aligned to the axis, up to 90 = fully the other way.
+// Used for any "stay flat" (axis: "horizontal") or "stay upright" (axis: "vertical") check.
+export function tiltDeviationDeg(landmarks, jointNameA, jointNameB, axis) {
+  const tilt = tiltFromHorizontalDeg(landmarks, jointNameA, jointNameB);
+  if (tilt === null) {
+    return null;
+  }
+  return axis === 'vertical' ? 90 - tilt : tilt;
+}
+
+// The single landmark (not a midpoint) for one joint on one side.
+// Used for a position check like "wrist above shoulder" (shoulder press lockout).
+export function landmarkFor(landmarks, jointName, side) {
+  return landmarks[landmarkIndexFor(jointName, side)];
+}
+
+// True when joint A is higher up the frame than joint B (smaller y = higher,
+// since image y grows downward), with a small margin so a level pair doesn't flicker.
+export function isAbove(landmarks, jointNameA, jointNameB, side) {
+  const a = landmarkFor(landmarks, jointNameA, side);
+  const b = landmarkFor(landmarks, jointNameB, side);
+  if (!a || !b) {
+    return null;
+  }
+  const MARGIN = 0.02;
+  return a.y < b.y - MARGIN;
 }
 
 // Every landmark a tracking rule needs: the main joint chain, each extra check's
@@ -116,6 +145,11 @@ export function jointsUsedByRule(rule) {
   if (rule.postureCheck) {
     names.add(rule.postureCheck.a);
     names.add(rule.postureCheck.b);
+  }
+  const positionChecks = rule.positionChecks || [];
+  for (let i = 0; i < positionChecks.length; i++) {
+    names.add(positionChecks[i].a);
+    names.add(positionChecks[i].b);
   }
   return Array.from(names);
 }

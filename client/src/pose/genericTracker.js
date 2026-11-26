@@ -9,10 +9,11 @@
 import { AngleSmoother } from './smoothing';
 import {
   angleForChain,
+  isAbove,
   jointsUsedByRule,
   pickBetterSide,
   sideVisibility,
-  tiltFromHorizontalDeg,
+  tiltDeviationDeg,
   VISIBILITY_THRESHOLD,
 } from './jointAngles';
 
@@ -117,9 +118,12 @@ export class GenericTracker {
       });
     }
 
-    // Posture check (for example: push-up must stay in a flat plank).
+    // Posture check: the line between two joints must stay close to a reference
+    // axis. "horizontal" is a flat plank (push-up); "vertical" is an upright
+    // torso or a vertical upper arm (lunge, overhead triceps extension).
     if (rule.postureCheck) {
-      const tilt = tiltFromHorizontalDeg(landmarks, rule.postureCheck.a, rule.postureCheck.b);
+      const axis = rule.postureCheck.axis || 'horizontal';
+      const tilt = tiltDeviationDeg(landmarks, rule.postureCheck.a, rule.postureCheck.b, axis);
       const tiltOk = tilt !== null && tilt <= rule.postureCheck.maxTiltDeg;
       if (!tiltOk) {
         this.stage = TRACKER_STAGES.NOT_IN_POSITION;
@@ -201,6 +205,29 @@ export class GenericTracker {
       }
     }
 
+    // Position checks (for example: shoulder press "wrists above shoulders" at
+    // lockout) use the same one-time-per-rep penalty as extra checks.
+    if (isActive && rule.positionChecks) {
+      for (let i = 0; i < rule.positionChecks.length; i++) {
+        const check = rule.positionChecks[i];
+        const aboveResult = isAbove(landmarks, check.a, check.b, side);
+        if (aboveResult === null) continue;
+        const wanted = check.relation !== 'below';
+        if (aboveResult !== wanted) {
+          const isNewPenalty = this.applyPenaltyOnce(`position-${i}`, EXTRA_CHECK_PENALTY);
+          if (isNewPenalty && onPostureAlert) {
+            onPostureAlert({
+              id: `position-check-${i}`,
+              icon: '📐',
+              part: 'Form',
+              title: 'Form Alert',
+              message: check.cue,
+            });
+          }
+        }
+      }
+    }
+
     const result = rule.mode === 'hold'
       ? this.processHold(angle, delta, onRepReported)
       : this.processReps(angle, delta, onRepReported);
@@ -210,12 +237,16 @@ export class GenericTracker {
 
   processHold(angle, delta, onRepReported) {
     const rule = this.rule;
-    const inHoldRange = angle >= rule.targetAngle && angle <= (rule.targetAngleMax ?? 999);
+    const tooLow = angle < rule.targetAngle;
+    const tooHigh = rule.targetAngleMax !== undefined && angle > rule.targetAngleMax;
 
-    if (!inHoldRange) {
+    if (tooLow || tooHigh) {
       this.stage = TRACKER_STAGES.IDLE;
+      // A hold exercise can be wrong in two different ways (for example plank:
+      // hips sagging vs. hips piked), each with its own cue if the rule gives one.
+      const cue = tooLow ? (rule.cues.tooLow || rule.cues.shallow) : (rule.cues.tooHigh || rule.cues.shallow);
       return this.buildOutput({
-        liveCue: rule.cues.shallow,
+        liveCue: cue,
         isFormValid: false,
         activeAngle: angle,
       });
@@ -246,8 +277,37 @@ export class GenericTracker {
     });
   }
 
+  // Most exercises start at a high angle and move to a low one (squat, bicep
+  // curl, push-up, bent-over row, crunch, overhead triceps extension): set
+  // "direction": "lower" (the default). A few start low and move high
+  // (shoulder press, lateral raise, dumbbell chest press): set "direction": "raise".
+  // Everything below is written in terms of these five comparisons so neither
+  // direction needs its own copy of the state machine.
+  directionCompare() {
+    const raising = this.rule.direction === 'raise';
+    return {
+      // Has the angle moved far enough from the start to begin a rep?
+      leftStart: (a) => (raising ? a > this.rule.descentAngle : a < this.rule.descentAngle),
+      // Full credit depth/height reached?
+      reachedTarget: (a) => (raising ? a >= this.rule.targetAngle : a <= this.rule.targetAngle),
+      // Acceptable-but-penalized depth/height reached?
+      reachedTargetMax: (a) => (raising ? a >= this.rule.targetAngleMax : a <= this.rule.targetAngleMax),
+      // Far enough past the bottom/top to start the return trip?
+      pastTurnaround: (a) => (raising ? a <= this.rule.ascentAngle : a >= this.rule.ascentAngle),
+      // Back at the starting position, rep complete?
+      backAtStart: (a) => (raising ? a <= this.rule.startAngle : a >= this.rule.startAngle),
+      // The single most extreme angle reached this rep so far (min if lowering,
+      // max if raising) is tracked the same way regardless of direction.
+      moreExtreme: (a, extreme) => (raising ? Math.max(a, extreme) : Math.min(a, extreme)),
+      // Reversed back toward the start without ever reaching a countable depth?
+      reversedEarly: (a, extreme) =>
+        raising ? a < extreme - 16 && a <= this.rule.descentAngle : a > extreme + 16 && a >= this.rule.descentAngle,
+    };
+  }
+
   processReps(angle, delta, onRepReported) {
     const rule = this.rule;
+    const cmp = this.directionCompare();
     let liveCue = rule.cues.good || 'Good form.';
     let isFormValid = true;
 
@@ -258,10 +318,10 @@ export class GenericTracker {
         break;
 
       case TRACKER_STAGES.IDLE:
-        if (angle < rule.descentAngle) {
+        if (cmp.leftStart(angle)) {
           this.stage = TRACKER_STAGES.DESCENDING;
           this.repStartTime = performance.now();
-          this.minAngleThisRep = angle;
+          this.extremeAngleThisRep = angle;
           this.resetRepPenalties();
         } else {
           liveCue = 'Ready in position.';
@@ -269,17 +329,17 @@ export class GenericTracker {
         break;
 
       case TRACKER_STAGES.DESCENDING: {
-        this.minAngleThisRep = Math.min(this.minAngleThisRep, angle);
-        liveCue = rule.cues.descending || 'Lowering...';
+        this.extremeAngleThisRep = cmp.moreExtreme(angle, this.extremeAngleThisRep);
+        liveCue = rule.cues.descending || 'Moving...';
 
-        if (angle <= rule.targetAngle) {
+        if (cmp.reachedTarget(angle)) {
           this.stage = TRACKER_STAGES.BOTTOM_REACHED;
           liveCue = rule.cues.good || 'Good depth!';
-        } else if (angle <= rule.targetAngleMax) {
+        } else if (cmp.reachedTargetMax(angle)) {
           this.applyPenaltyOnce('partial-depth', PARTIAL_DEPTH_PENALTY);
           this.stage = TRACKER_STAGES.BOTTOM_REACHED;
           liveCue = rule.cues.partialDepth || 'Close, but go a little further next time.';
-        } else if (angle > this.minAngleThisRep + 16 && angle >= rule.descentAngle) {
+        } else if (cmp.reversedEarly(angle, this.extremeAngleThisRep)) {
           // Reversed back toward the start before reaching a countable depth.
           this.stage = TRACKER_STAGES.IDLE;
           isFormValid = false;
@@ -290,14 +350,14 @@ export class GenericTracker {
 
       case TRACKER_STAGES.BOTTOM_REACHED:
         liveCue = rule.cues.partialDepth || 'Now reverse the movement.';
-        if (angle >= rule.ascentAngle) {
+        if (cmp.pastTurnaround(angle)) {
           this.stage = TRACKER_STAGES.ASCENDING;
         }
         break;
 
       case TRACKER_STAGES.ASCENDING: {
         liveCue = 'Returning to start...';
-        if (angle >= rule.startAngle) {
+        if (cmp.backAtStart(angle)) {
           const seconds = (performance.now() - this.repStartTime) / 1000;
           this.completeRep(seconds, onRepReported);
           this.stage = TRACKER_STAGES.IDLE;
