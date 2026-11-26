@@ -66,12 +66,30 @@
       "avatarView": "side",
       "day": "day-1",
       "bodyPart": "Chest",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 0, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 0, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "direction": "raise",
+        "joints": ["shoulder", "elbow", "wrist"],
+        "startAngle": 90,
+        "descentAngle": 110,
+        "targetAngle": 150,
+        "targetAngleMax": 140,
+        "ascentAngle": 130,
+        "minRepSeconds": 2.5,
+        "cues": {
+          "descending": "Pressing up...",
+          "partialDepth": "Good, press a little higher for full extension.",
+          "shallow": "Not enough extension! Press all the way up.",
+          "good": "Great press!"
+        }
       }
     },
     {
@@ -115,12 +133,36 @@
       "avatarView": "side",
       "day": "day-1",
       "bodyPart": "Arms",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 0, "arm": -170, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 0, "arm": -170, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["shoulder", "elbow", "wrist"],
+        "startAngle": 150,
+        "descentAngle": 130,
+        "targetAngle": 70,
+        "targetAngleMax": 80,
+        "ascentAngle": 100,
+        "minRepSeconds": 2.5,
+        "postureCheck": {
+          "a": "shoulder",
+          "b": "elbow",
+          "axis": "vertical",
+          "maxTiltDeg": 25,
+          "cue": "Keep your upper arms pointing straight up."
+        },
+        "cues": {
+          "descending": "Lowering behind your head...",
+          "partialDepth": "Good, bend your elbows a little further.",
+          "shallow": "Lower further! Not enough of a stretch.",
+          "good": "Great extension!"
+        }
       }
     },
     {
@@ -130,12 +172,37 @@
       "avatarView": "side",
       "day": "day-2",
       "bodyPart": "Back",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 35, "arm": 10, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 35, "arm": 10, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["shoulder", "elbow", "wrist"],
+        "startAngle": 150,
+        "descentAngle": 135,
+        "targetAngle": 90,
+        "targetAngleMax": 100,
+        "ascentAngle": 110,
+        "minRepSeconds": 2.5,
+        "extraChecks": [
+          {
+            "joints": ["shoulder", "hip", "knee"],
+            "min": 90,
+            "max": 130,
+            "cue": "Keep your back flat, don't round your spine."
+          }
+        ],
+        "cues": {
+          "descending": "Rowing up...",
+          "partialDepth": "Good pull, bring your elbow a little further back.",
+          "shallow": "Pull higher! Not enough of a row.",
+          "good": "Great row!"
+        }
       }
     },
     {
@@ -145,12 +212,24 @@
       "avatarView": "side",
       "day": "day-2",
       "bodyPart": "Back",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": -20, "arm": -140, "thigh": -10, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": -20, "arm": -140, "thigh": -10, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "hold",
+        "view": "side",
+        "joints": ["shoulder", "hip", "knee"],
+        "targetAngle": 165,
+        "targetAngleMax": 180,
+        "minHoldSeconds": 2,
+        "cues": {
+          "good": "Great lift, hold your chest and legs up!",
+          "tooLow": "Lift your chest and legs higher off the floor."
+        }
       }
     },
     {
@@ -160,12 +239,38 @@
       "avatarView": "front",
       "day": "day-2",
       "bodyPart": "Shoulders",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": true,
         "loopTimeMs": 2800,
         "start": { "torso": 0, "arm": -40, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 0, "arm": -175, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "front",
+        "direction": "raise",
+        "joints": ["shoulder", "elbow", "wrist"],
+        "startAngle": 90,
+        "descentAngle": 105,
+        "targetAngle": 160,
+        "targetAngleMax": 150,
+        "ascentAngle": 140,
+        "minRepSeconds": 2.5,
+        "positionChecks": [
+          {
+            "a": "wrist",
+            "b": "shoulder",
+            "relation": "above",
+            "cue": "Press your wrists above your shoulders at the top."
+          }
+        ],
+        "cues": {
+          "descending": "Pressing up...",
+          "partialDepth": "Good, press a little higher for full lockout.",
+          "shallow": "Press higher! Not enough extension overhead.",
+          "good": "Great press!"
+        }
       }
     },
     {
@@ -175,12 +280,32 @@
       "avatarView": "front",
       "day": "day-2",
       "bodyPart": "Shoulders",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 0, "arm": -95, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 0, "arm": -95, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "front",
+        "direction": "raise",
+        "joints": ["hip", "shoulder", "elbow"],
+        "startAngle": 20,
+        "descentAngle": 35,
+        "targetAngle": 100,
+        "targetAngleMax": 80,
+        "ascentAngle": 70,
+        "safetyMax": 110,
+        "minRepSeconds": 2.5,
+        "cues": {
+          "descending": "Raising arms...",
+          "partialDepth": "Good height, raise a touch higher for full range.",
+          "shallow": "Raise your arms higher! Not enough lift.",
+          "good": "Great lateral raise!",
+          "safety": "Arms raised too high, that's beyond shoulder height. Ease down."
+        }
       }
     },
     {
@@ -224,12 +349,38 @@
       "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Legs",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 0, "arm": 0, "thigh": -55, "shin": 70, "bodyShiftY": 14 },
         "end": { "torso": 0, "arm": 0, "thigh": -55, "shin": 70, "bodyShiftY": 14 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["hip", "knee", "ankle"],
+        "startAngle": 150,
+        "descentAngle": 135,
+        "targetAngle": 100,
+        "targetAngleMax": 110,
+        "ascentAngle": 120,
+        "safetyMin": 40,
+        "minRepSeconds": 2.5,
+        "postureCheck": {
+          "a": "shoulder",
+          "b": "hip",
+          "axis": "vertical",
+          "maxTiltDeg": 20,
+          "cue": "Keep your torso upright."
+        },
+        "cues": {
+          "descending": "Lowering down... reach target depth",
+          "partialDepth": "Good effort, go a little lower next time.",
+          "shallow": "Go lower! That lunge wasn't deep enough.",
+          "good": "Great lunge!",
+          "safety": "That knee angle looks extreme. Stand up and reset."
+        }
       }
     },
     {
@@ -239,12 +390,25 @@
       "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Abdomen",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 70, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 },
         "end": { "torso": 70, "arm": -80, "thigh": 0, "shin": 0, "bodyShiftY": 0 }
+      },
+      "tracking": {
+        "mode": "hold",
+        "view": "side",
+        "joints": ["shoulder", "hip", "ankle"],
+        "targetAngle": 165,
+        "targetAngleMax": 180,
+        "minHoldSeconds": 1,
+        "cues": {
+          "good": "Great plank, keep holding!",
+          "tooLow": "Lift your hips! Don't let them sag.",
+          "tooHigh": "Lower your hips! Don't pike up."
+        }
       }
     },
     {
@@ -254,12 +418,29 @@
       "avatarView": "side",
       "day": "day-3",
       "bodyPart": "Abdomen",
-      "liveCorrection": false,
+      "liveCorrection": true,
       "posture": {
         "animated": false,
         "loopTimeMs": 2600,
         "start": { "torso": 45, "arm": 10, "thigh": -40, "shin": 90, "bodyShiftY": 10 },
         "end": { "torso": 45, "arm": 10, "thigh": -40, "shin": 90, "bodyShiftY": 10 }
+      },
+      "tracking": {
+        "mode": "reps",
+        "view": "side",
+        "joints": ["shoulder", "hip", "knee"],
+        "startAngle": 175,
+        "descentAngle": 170,
+        "targetAngle": 150,
+        "targetAngleMax": 160,
+        "ascentAngle": 165,
+        "minRepSeconds": 2.5,
+        "cues": {
+          "descending": "Crunching up...",
+          "partialDepth": "Good, crunch up a little further.",
+          "shallow": "Crunch higher! Not enough of a lift.",
+          "good": "Great crunch!"
+        }
       }
     }
   ]
