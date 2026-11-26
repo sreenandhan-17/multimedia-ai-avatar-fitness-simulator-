@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SignInForm from './SignInForm';
 import CreateAccountForm from './CreateAccountForm';
 import ForgotPasswordView from './ForgotPasswordView';
+import { getAuthErrorMessage, signInWithGoogle } from '../services/auth';
 import './AuthCard.css';
 
 function GoogleIcon() {
@@ -18,30 +19,15 @@ function GoogleIcon() {
 // mode is one of: 'signin', 'create', 'forgot'
 export default function AuthCard({ onAuthSuccess }) {
   const [mode, setMode] = useState('signin');
+  const [googleError, setGoogleError] = useState('');
 
-  function handleGoogleLogin(e) {
-    if (e) {
-      if (typeof e.preventDefault === 'function') e.preventDefault();
-      if (typeof e.stopPropagation === 'function') e.stopPropagation();
-    }
-
+  async function handleGoogleLogin() {
+    setGoogleError('');
     try {
-      localStorage.setItem('fitness-avatar-auth-provider', 'google');
-      localStorage.setItem('fitness-avatar-logged-in', 'true');
-    } catch (_) {}
-
-    // Redirect to Google Login (supports OAuth if VITE_GOOGLE_CLIENT_ID exists, otherwise Google Accounts sign-in)
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (googleClientId) {
-      const redirectUri = `${window.location.origin}/login?google=success`;
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(
-        googleClientId
-      )}&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}&response_type=token%20id_token&scope=openid%20email%20profile&nonce=${Date.now()}`;
-      window.location.href = authUrl;
-    } else {
-      window.location.href = 'https://accounts.google.com/signin';
+      await signInWithGoogle();
+      onAuthSuccess();
+    } catch (error) {
+      setGoogleError(getAuthErrorMessage(error));
     }
   }
 
@@ -85,13 +71,17 @@ export default function AuthCard({ onAuthSuccess }) {
             type="button"
             className="google-button btn-secondary btn-md"
             onClick={handleGoogleLogin}
-            onTouchEnd={handleGoogleLogin}
             aria-label="Login with Google"
             title="Login with Google"
           >
             <GoogleIcon />
             <span>Login with Google</span>
           </button>
+          {googleError && (
+            <p className="field-error" role="alert">
+              {googleError}
+            </p>
+          )}
         </>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Icon from './Icon';
 import { isValidEmail, isValidPassword } from '../utils/validators';
+import { getAuthErrorMessage, signUp } from '../services/auth';
 
 export default function CreateAccountForm({ onSuccess }) {
   const [name, setName] = useState('');
@@ -8,8 +9,10 @@ export default function CreateAccountForm({ onSuccess }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const nextErrors = {};
@@ -24,10 +27,21 @@ export default function CreateAccountForm({ onSuccess }) {
     }
     setErrors(nextErrors);
 
+    setFormError('');
+
     const hasErrors = Object.keys(nextErrors).length > 0;
-    if (!hasErrors) {
-      onSuccess();
+    if (hasErrors) {
+      return;
     }
+
+    setSubmitting(true);
+    try {
+      await signUp(name, email, password);
+      onSuccess();
+    } catch (error) {
+      setFormError(getAuthErrorMessage(error));
+    }
+    setSubmitting(false);
   }
 
   return (
@@ -94,8 +108,14 @@ export default function CreateAccountForm({ onSuccess }) {
         )}
       </div>
 
-      <button type="submit" className="primary-button btn-md">
-        Create account
+      {formError && (
+        <p className="field-error" role="alert">
+          {formError}
+        </p>
+      )}
+
+      <button type="submit" className="primary-button btn-md" disabled={submitting}>
+        {submitting ? 'Creating account...' : 'Create account'}
       </button>
     </form>
   );

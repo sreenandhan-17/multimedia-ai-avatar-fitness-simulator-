@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import Icon from './Icon';
 import { isValidEmail } from '../utils/validators';
+import { getAuthErrorMessage, sendResetEmail } from '../services/auth';
 
 export default function ForgotPasswordView({ onBackToSignIn }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (!isValidEmail(email)) {
@@ -16,8 +18,14 @@ export default function ForgotPasswordView({ onBackToSignIn }) {
     }
 
     setError('');
-    // UI only for now: no real email is sent.
-    setSent(true);
+    setSubmitting(true);
+    try {
+      await sendResetEmail(email);
+      setSent(true);
+    } catch (resetError) {
+      setError(getAuthErrorMessage(resetError));
+    }
+    setSubmitting(false);
   }
 
   if (sent) {
@@ -53,8 +61,8 @@ export default function ForgotPasswordView({ onBackToSignIn }) {
         )}
       </div>
 
-      <button type="submit" className="primary-button btn-md">
-        Send reset link
+      <button type="submit" className="primary-button btn-md" disabled={submitting}>
+        {submitting ? 'Sending...' : 'Send reset link'}
       </button>
 
       <button type="button" className="link-button back-link" onClick={onBackToSignIn}>
