@@ -8,7 +8,13 @@ export default function TopBar({ theme, toggleTheme }) {
   const navigate = useNavigate();
 
   async function handleSignOut() {
-    await signOutUser();
+    try {
+      await signOutUser();
+    } catch (error) {
+      // Signing out can fail (no .env, no network). Go to the login page anyway;
+      // if the user is still signed in, that page sends them straight back.
+      console.error('Sign out failed:', error);
+    }
     navigate('/login');
   }
 

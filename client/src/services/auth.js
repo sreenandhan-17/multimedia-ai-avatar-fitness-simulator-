@@ -23,7 +23,14 @@ function requireAuth() {
 // Creates the account and saves the name the user typed.
 export async function signUp(name, email, password) {
   const result = await createUserWithEmailAndPassword(requireAuth(), email.trim(), password);
-  await updateProfile(result.user, { displayName: name.trim() });
+
+  // The account already exists at this point. If saving the name fails, do not
+  // report the sign-up as failed, or a retry would say "email already in use".
+  try {
+    await updateProfile(result.user, { displayName: name.trim() });
+  } catch (error) {
+    console.error('Could not save display name:', error);
+  }
   return result.user;
 }
 
