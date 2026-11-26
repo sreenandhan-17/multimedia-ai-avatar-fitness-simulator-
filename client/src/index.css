@@ -116,3 +116,10 @@ a {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Shown while Firebase checks the saved login after a refresh. */
+.auth-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-muted);
+}

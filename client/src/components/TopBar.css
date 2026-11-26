@@ -26,6 +26,15 @@
   text-decoration: none;
 }
 
+/* The Sign out link is a button, so remove the default button look. */
+button.top-bar-link {
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
 .top-bar-link:hover {
   color: var(--color-accent);
 }

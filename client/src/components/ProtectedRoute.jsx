@@ -1,10 +1,17 @@
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
-// Wrap any page that requires a fake login with this. No flag -> back to /login.
+// Wrap any page that needs a logged-in user with this.
+// While Firebase is still checking the saved login we show nothing,
+// otherwise a refresh would bounce a logged-in user to /login.
 export default function ProtectedRoute({ children }) {
-  const loggedIn = localStorage.getItem('fitness-avatar-logged-in') === 'true';
+  const { user, loading } = useAuth();
 
-  if (!loggedIn) {
+  if (loading) {
+    return <p className="auth-loading" role="status">Loading...</p>;
+  }
+
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
