@@ -77,6 +77,7 @@ export function useWorkoutSession({
   const reportRep = useCallback(
     ({
       correct = true,
+      duration,
       seconds = 2.5,
       mistake = null,
       repScore = 100,
@@ -84,7 +85,9 @@ export function useWorkoutSession({
     }) => {
       if (isResting || isFinished) return;
 
-      setTotalRepDuration((prev) => prev + seconds);
+      // The generic tracker sends "duration"; dev simulate helpers send "seconds".
+      const repSeconds = duration ?? seconds;
+      setTotalRepDuration((prev) => prev + repSeconds);
 
       const score =
         typeof repScore === 'number'
@@ -102,7 +105,13 @@ export function useWorkoutSession({
 
       setWorkoutRepScores((prev) => [...prev, score]);
 
-      if (correct && score >= 70) {
+      // The tracker's own "correct" flag is just score >= 70, so a rep with
+      // one penalty (-15 or -25) still comes through as correct: true. The
+      // only way to know no penalty fired at all is a clean, unpenalised
+      // score of 100 -- that is what "no unresolved penalty" means here.
+      const repIsGood = correct && score === 100;
+
+      if (repIsGood) {
         setTotalGoodReps((g) => g + 1);
       } else {
         setTotalBadReps((b) => b + 1);
@@ -112,6 +121,13 @@ export function useWorkoutSession({
           ...prev,
           [mistakeLabel]: (prev[mistakeLabel] || 0) + 1,
         }));
+      }
+
+      // Rep rule (CLAUDE.md): wrong form shows the cue but does NOT count
+      // toward the set. Keep the count the same so the user redoes the rep.
+      if (!repIsGood) {
+        setFeedback('Form not quite right on that rep, try it again.');
+        return;
       }
 
       setCurrentReps((prevReps) => {
