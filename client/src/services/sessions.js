@@ -408,14 +408,18 @@ async function uploadPendingSessions(uid) {
       await withTimeout(saveSessionToFirestore(uid, session));
       removePendingSession(uid, session.id);
     } catch (error) {
-      console.warn("Could not upload a pending session yet:", error);
-
-      // A rejected session (rules) must not block the others. Anything else is most
-      // likely a connection problem, so stop and try again later.
+      // A rejected session (rules) can never succeed, so remove it instead of retrying
+      // forever. Anything else is most likely a connection problem: keep it queued and
+      // stop here, so the remaining sessions get a turn on the next sync.
       const isRejected = error && (error.code === "permission-denied" || error.code === "invalid-argument");
-      if (!isRejected) {
-        return false;
+      if (isRejected) {
+        console.warn("Dropping a pending session the server will never accept:", error);
+        removePendingSession(uid, session.id);
+        continue;
       }
+
+      console.warn("Could not upload a pending session yet:", error);
+      return false;
     }
   }
   return true;
