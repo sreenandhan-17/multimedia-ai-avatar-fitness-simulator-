@@ -46,10 +46,20 @@ export async function saveSession(session) {
   writeSessionsToStorage(sessions);
 }
 
+// Turns a session's date into a number. A missing or invalid date becomes 0,
+// so it sorts last instead of giving NaN and a random order.
+function getSessionTime(session) {
+  const time = new Date(session.date).getTime();
+  if (Number.isNaN(time)) {
+    return 0;
+  }
+  return time;
+}
+
 // Returns every saved session, newest first.
 export async function getSessions() {
   const sessions = readSessionsFromStorage();
-  sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+  sessions.sort((a, b) => getSessionTime(b) - getSessionTime(a));
   return sessions;
 }
 
@@ -88,21 +98,33 @@ export async function addSampleSessions() {
     const exerciseId = SAMPLE_EXERCISE_IDS[i % SAMPLE_EXERCISE_IDS.length];
     const mistakeName = SAMPLE_MISTAKES[i % SAMPLE_MISTAKES.length];
 
+    // Round to one decimal so we get 2.8 and not 2.8000000000000003.
+    const avgTempo = Math.round((2.4 + (i % 5) * 0.2) * 10) / 10;
+
     sampleSessions.push({
-      id: String(sessionDate.getTime()),
+      // The "sample-" prefix lets us find and replace old samples, and "-i" keeps ids unique.
+      id: "sample-" + sessionDate.getTime() + "-" + i,
       date: sessionDate.toISOString(),
       exerciseId: exerciseId,
       sets: 3,
       reps: 30 + (i % 4) * 5,
       accuracy: 70 + (i % 6) * 5,
-      avgTempo: 2.4 + (i % 5) * 0.2,
+      avgTempo: avgTempo,
       durationSeconds: 420 + (i % 5) * 30,
       mistakes: { [mistakeName]: 1 + (i % 3) },
     });
   }
 
+  // Keep real sessions, drop samples from an earlier call so the data is not doubled.
+  const realSessions = [];
   const existingSessions = readSessionsFromStorage();
-  writeSessionsToStorage(sampleSessions.concat(existingSessions));
+  for (let i = 0; i < existingSessions.length; i++) {
+    const existingId = String(existingSessions[i].id);
+    if (!existingId.startsWith("sample-")) {
+      realSessions.push(existingSessions[i]);
+    }
+  }
+  writeSessionsToStorage(sampleSessions.concat(realSessions));
 }
 
 // Deletes every saved session.
