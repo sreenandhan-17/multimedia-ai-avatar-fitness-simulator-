@@ -12,6 +12,9 @@ export default function TopBar({ theme, toggleTheme }) {
         <Link to="/tutorial" className="top-bar-link">
           Tutorial
         </Link>
+        <Link to="/dashboard" className="top-bar-link">
+          Dashboard
+        </Link>
       </nav>
 
       <div className="top-bar-actions">
