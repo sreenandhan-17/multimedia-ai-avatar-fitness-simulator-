@@ -5,6 +5,13 @@ A web app where an avatar demonstrates an exercise and the webcam checks the use
 live, using MediaPipe Pose. Everything runs in the browser — no video or image data is ever
 sent anywhere, and there are no paid APIs.
 
+## Live demo
+
+**[fitness-avatar-simulator.web.app](https://fitness-avatar-simulator.web.app)**
+
+Works on a laptop or a phone — login (email or Google), the full weekly split, live
+camera form-checking, the avatar, and the dashboard all run from this link, no setup needed.
+
 ## Quick start
 
 ```bash
@@ -16,6 +23,23 @@ npm run dev
 
 Open the local URL Vite prints (usually `http://localhost:5173`). Camera access needs
 `localhost` or HTTPS.
+
+## Deploy
+
+The app is hosted on Firebase Hosting. To deploy from your own machine:
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase use fitness-avatar-simulator --alias default   # one-time, per machine
+cd client
+npm run deploy   # builds, then firebase deploy --only hosting
+```
+
+`firebase.json`'s `hosting` config serves `client/dist` with a single-page-app rewrite
+(every route falls back to `index.html`), so refreshing any page — `/dashboard` included —
+works on the live link instead of 404ing. The build reads `VITE_FIREBASE_…` values from
+`client/.env`, which is never committed (see `client/.env.example` for the expected keys).
 
 ## What it does
 
