@@ -9,8 +9,10 @@ sent anywhere, and there are no paid APIs.
 
 **[fitness-avatar-simulator.web.app](https://fitness-avatar-simulator.web.app)**
 
-Works on a laptop or a phone — login (email or Google), the full weekly split, live
-camera form-checking, the avatar, and the dashboard all run from this link, no setup needed.
+No setup needed — open the link and log in. Confirmed working live: email login,
+the weekly split, and camera-based live correction. Google login, the phone layout,
+and saving a workout to the dashboard are expected to work the same way they do
+locally, but haven't been explicitly checked on the live link yet.
 
 ## Quick start
 
