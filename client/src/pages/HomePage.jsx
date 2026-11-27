@@ -123,7 +123,7 @@ export default function HomePage({ theme, toggleTheme }) {
         <div className="home-hero-text">
           <h1 className="home-hero-title">Fitness Avatar Simulator</h1>
           <p className="home-hero-tagline">
-            Your AI trainer that watches your form and corrects your posture in real time.
+            Your avatar leads, your webcam checks your form — right in the browser.
           </p>
           <button type="button" className="home-cta-btn" onClick={handleGetStarted}>
             Get Started
