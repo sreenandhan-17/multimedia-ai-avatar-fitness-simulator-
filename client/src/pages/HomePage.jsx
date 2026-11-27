@@ -52,6 +52,8 @@ const HOW_IT_WORKS = [
 
 // Exercises shown in turn on the hero avatar, one per body part group, so a
 // first-time visitor sees a variety rather than just squat on a loop.
+// Every id here must exist in exercises.json -- getAvatarSettings() falls
+// back to the SVG avatar silently if one doesn't.
 const HERO_EXERCISES = ['squat', 'bicep-curl', 'push-up', 'shoulder-press', 'plank', 'lunge'];
 const HERO_EXERCISE_INTERVAL_MS = 4000;
 
