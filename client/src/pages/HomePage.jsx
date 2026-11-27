@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Avatar3D from '../components/Avatar3D';
 import ThemeToggle from '../components/ThemeToggle';
 import { useAuth } from '../hooks/useAuth';
+import { getPostLoginRoute } from '../utils/postLoginRoute';
 import './HomePage.css';
 
 const HOW_IT_WORKS = [
@@ -97,14 +98,9 @@ export default function HomePage({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  function getLoggedInNextPage() {
-    const tutorialDone = localStorage.getItem('fitness-avatar-tutorial-done') === 'true';
-    return tutorialDone ? '/split' : '/tutorial';
-  }
-
   function handleGetStarted() {
     if (!loading && user) {
-      navigate(getLoggedInNextPage());
+      navigate(getPostLoginRoute());
     } else {
       navigate('/login');
     }
