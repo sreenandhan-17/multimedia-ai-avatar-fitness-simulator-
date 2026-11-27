@@ -50,6 +50,13 @@ const HOW_IT_WORKS = [
   },
 ];
 
+// Exercises shown in turn on the hero avatar, one per body part group, so a
+// first-time visitor sees a variety rather than just squat on a loop.
+// Every id here must exist in exercises.json -- getAvatarSettings() falls
+// back to the SVG avatar silently if one doesn't.
+const HERO_EXERCISES = ['squat', 'bicep-curl', 'push-up', 'shoulder-press', 'plank', 'lunge'];
+const HERO_EXERCISE_INTERVAL_MS = 4000;
+
 const QUICK_INSTRUCTIONS = [
   'Stand about 2-3 meters from the camera',
   'Keep your whole body in frame',
@@ -97,6 +104,19 @@ function FadeInSection({ children, className = '' }) {
 export default function HomePage({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [heroExerciseIndex, setHeroExerciseIndex] = useState(0);
+
+  // Cycle the hero avatar through a few exercises so it's not just squat on
+  // a loop. Skipped under reduced motion, same as the rest of this page.
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return undefined;
+
+    const intervalId = setInterval(() => {
+      setHeroExerciseIndex((prev) => (prev + 1) % HERO_EXERCISES.length);
+    }, HERO_EXERCISE_INTERVAL_MS);
+    return () => clearInterval(intervalId);
+  }, []);
 
   function handleGetStarted() {
     if (!loading && user) {
@@ -121,13 +141,10 @@ export default function HomePage({ theme, toggleTheme }) {
           <p className="home-hero-tagline">
             Your avatar leads, your webcam checks your form — right in the browser.
           </p>
-          <button type="button" className="home-cta-btn" onClick={handleGetStarted}>
-            Get Started
-          </button>
         </div>
 
         <div className="home-hero-avatar">
-          <Avatar3D exercise="squat" playing speed={0.5} />
+          <Avatar3D exercise={HERO_EXERCISES[heroExerciseIndex]} playing speed={0.5} />
         </div>
       </section>
 
