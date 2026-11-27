@@ -9,7 +9,7 @@ The plan has two parts:
 ---
 
 ## Decisions locked in
-- **Flow:** Intro (first visit only) -> Login -> Tutorial -> Weekly split -> Exercise list -> Workout -> Summary. Dashboard from the top bar.
+- **Flow:** Home landing page ("/") -> Login -> Tutorial -> Weekly split -> Exercise list -> Workout -> Summary. Dashboard from the top bar. The original timed intro from Phase 2 below still exists at `/intro`, but is no longer the default landing experience (issue #36).
 - **Look:** light and dark themes with a toggle. Works at 360px and on a laptop.
 - **Login:** email + password, Google button, Create account tab, Forgot password (UI only). Fake auth for now. Full-screen dark gym-style background with a large animated avatar beside the form.
 - **Tutorial:** 5 steps, required the first time, skippable after.

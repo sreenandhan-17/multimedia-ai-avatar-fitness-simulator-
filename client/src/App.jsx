@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
-import IntroGate from './pages/IntroGate';
+import HomePage from './pages/HomePage';
+import IntroPage from './pages/IntroPage';
 import LoginPage from './pages/LoginPage';
 import TutorialPage from './pages/TutorialPage';
 import SplitPage from './pages/SplitPage';
@@ -14,9 +15,9 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<IntroGate theme={theme} toggleTheme={toggleTheme} />} />
+      <Route path="/" element={<HomePage theme={theme} toggleTheme={toggleTheme} />} />
       <Route path="/login" element={<LoginPage theme={theme} toggleTheme={toggleTheme} />} />
-      <Route path="/intro" element={<IntroGate theme={theme} toggleTheme={toggleTheme} />} />
+      <Route path="/intro" element={<IntroPage theme={theme} toggleTheme={toggleTheme} />} />
       <Route
         path="/tutorial"
         element={
