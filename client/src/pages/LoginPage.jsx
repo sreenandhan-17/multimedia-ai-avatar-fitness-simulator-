@@ -2,24 +2,20 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 import ThemeToggle from '../components/ThemeToggle';
 import { useAuth } from '../hooks/useAuth';
+import { getPostLoginRoute } from '../utils/postLoginRoute';
 import './LoginPage.css';
 
 export default function LoginPage({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  function getNextPage() {
-    const tutorialDone = localStorage.getItem('fitness-avatar-tutorial-done') === 'true';
-    return tutorialDone ? '/split' : '/tutorial';
-  }
-
   function handleAuthSuccess() {
-    navigate(getNextPage());
+    navigate(getPostLoginRoute());
   }
 
   // Already logged in (for example after a refresh): skip the login screen.
   if (!loading && user) {
-    return <Navigate to={getNextPage()} replace />;
+    return <Navigate to={getPostLoginRoute()} replace />;
   }
 
   return (

@@ -26,7 +26,7 @@ Read `docs/IMPLEMENTATION_PLAN.md` for the phases. Work on one phase at a time, 
 
 ## Product decisions
 
-**Flow:** Intro (first visit only) -> Login -> Tutorial (required first time, skippable after) -> Weekly split -> Exercise list -> Workout -> Summary. Dashboard is reachable from the top bar.
+**Flow:** Home landing page ("/", public, explains the app and has a "Get Started" button) -> Login -> Tutorial (required first time, skippable after) -> Weekly split -> Exercise list -> Workout -> Summary. Dashboard is reachable from the top bar. The old timed auto-advancing intro still exists at `/intro` for anyone who wants it, but it is no longer the default landing experience (issue #36).
 
 **Look:** light and dark themes with a toggle (saved in localStorage). All colours come from CSS variables. Must work at 360px wide and on a laptop. Respect `prefers-reduced-motion`. Keyboard accessible.
 

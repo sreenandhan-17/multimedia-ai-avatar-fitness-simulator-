@@ -45,11 +45,13 @@ works on the live link instead of 404ing. The build reads `VITE_FIREBASE_…` va
 
 ## What it does
 
-- **Flow:** Intro (first visit only) → Login → Tutorial → Weekly split → Exercise list →
-  Workout → Summary. Dashboard is reachable from the top bar.
+- **Flow:** Home landing page ("/") → Login → Tutorial → Weekly split → Exercise list →
+  Workout → Summary. Dashboard is reachable from the top bar. The original timed intro
+  still exists at `/intro`, but is no longer the default landing experience.
 - **Weekly split:** 3 days, 2 body parts per day, 2 exercises per group — 12 exercises total.
-- **Live correction:** squat and bicep curl are checked live against the webcam (pose
-  landmarks, joint angles, rep counting). Other exercises currently show a demo animation only.
+- **Live correction:** all 12 exercises are checked live against the webcam (pose
+  landmarks, joint angles, rep counting, driven by a per-exercise rule in
+  `exercises.json` — see `docs/TRACKING_RULES.md`).
 - **Themes:** light and dark, toggle saved in the browser.
 
 ## Project structure

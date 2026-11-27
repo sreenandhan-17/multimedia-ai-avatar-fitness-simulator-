@@ -1,0 +1,292 @@
+.home-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(160deg, var(--color-bg) 0%, var(--color-bg-pattern) 100%);
+  color: var(--color-text);
+}
+
+/* Soft blurred glow shapes, purely decorative. */
+.home-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-glow-one {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  right: -100px;
+  background: var(--color-accent);
+}
+
+.home-glow-two {
+  width: 360px;
+  height: 360px;
+  bottom: 10%;
+  left: -140px;
+  background: var(--color-accent-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-glow {
+    opacity: 0.2;
+  }
+}
+
+.home-hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px 60px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    padding: 56px 20px 40px;
+    text-align: center;
+  }
+}
+
+.home-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 860px) {
+  .home-hero-text {
+    align-items: center;
+  }
+}
+
+.home-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-hero-tagline {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--color-text-muted);
+  max-width: 480px;
+}
+
+.home-cta-btn {
+  width: fit-content;
+  padding: 14px 32px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-strong) 100%);
+  color: var(--color-bg);
+  font-size: 1.05rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 860px) {
+  .home-cta-btn {
+    margin: 8px auto 0;
+  }
+}
+
+.home-hero-avatar {
+  position: relative;
+  height: 360px;
+  border-radius: 20px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+@media (max-width: 860px) {
+  .home-hero-avatar {
+    height: 300px;
+  }
+}
+
+/* --- Fade-in-on-scroll sections --- */
+
+.home-fade-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.home-fade-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-fade-section {
+    transition: none;
+    transform: none;
+  }
+}
+
+.home-section {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.home-section-title {
+  margin: 0 0 32px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* --- How it works --- */
+
+.home-how-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .home-how-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .home-how-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-how-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  align-items: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.home-how-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+}
+
+.home-how-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-accent);
+}
+
+.home-how-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.home-how-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.home-how-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* --- Quick instructions --- */
+
+.home-instructions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 640px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-instruction-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+}
+
+.home-check-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-accent-strong);
+  margin-top: 2px;
+}
+
+/* --- Final CTA --- */
+
+.home-final-cta {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 80px;
+}
+
+.home-final-cta-text {
+  margin: 0 0 8px 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+/* 360px check: hero already stacks under 860px, but the CTA button stays
+   fit-content and the avatar stage can still feel tall on a small phone.
+   Force a true full-width button and cap the avatar height here instead. */
+@media (max-width: 600px) {
+  .home-cta-btn {
+    width: 100%;
+  }
+
+  .home-hero-avatar {
+    height: 260px;
+  }
+
+  .home-how-grid {
+    grid-template-columns: 1fr;
+  }
+}
